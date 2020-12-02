@@ -36,6 +36,7 @@ public class TestController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            //防止并发写重复读取数据，控制单线程读
             service.writeRemoteToSzLibrary();
         });
 
