@@ -17,6 +17,7 @@
 .mtj.tmp/
 *.iml
 .idea
+mvnw*
 
 
 # Package Files #
