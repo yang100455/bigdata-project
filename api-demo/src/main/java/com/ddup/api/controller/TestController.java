@@ -30,14 +30,10 @@ public class TestController {
         logger.info("pages: {}", pages);
 
         IntStream.range(0, pages).forEach(idx -> {
-            try {
-                //防止写入过快，休眠2s
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             //防止并发写重复读取数据，控制单线程读
-            service.writeRemoteToSzLibrary();
+            synchronized (this.getClass()) {
+                service.writeRemoteToSzLibrary();
+            }
         });
 
         return "success";
