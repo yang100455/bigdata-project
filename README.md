@@ -54,7 +54,64 @@
 
 [**CDH6.3.2添加安装flink-yarn服务**](https://blog.csdn.net/qq_31454379/article/details/110440037)
 
+
+
+## dolphinscheduler
+admin/dolphinscheduler123
+
+一键停止集群所有服务
+
+```shell
+sh ./bin/stop-all.sh
+```
+
+一键开启集群所有服务
+
+```shell
+sh ./bin/start-all.sh
+```
+
+启停Master
+
+```shell
+sh ./bin/dolphinscheduler-daemon.sh start master-server
+sh ./bin/dolphinscheduler-daemon.sh stop master-server
+```
+
+启停Worker
+
+```shell
+sh ./bin/dolphinscheduler-daemon.sh start worker-server
+sh ./bin/dolphinscheduler-daemon.sh stop worker-server
+```
+
+启停Api
+
+```shell
+sh ./bin/dolphinscheduler-daemon.sh start api-server
+sh ./bin/dolphinscheduler-daemon.sh stop api-server
+```
+
+启停Logger
+
+```shell
+sh ./bin/dolphinscheduler-daemon.sh start logger-server
+sh ./bin/dolphinscheduler-daemon.sh stop logger-server
+```
+
+启停Alert
+
+```shell
+sh ./bin/dolphinscheduler-daemon.sh start alert-server
+sh ./bin/dolphinscheduler-daemon.sh stop alert-server
+```
+
+
+
+
+
 <span><img width='50px' src="https://img.shields.io/badge/使用-black" alt="使用" /> <span/>
+
 
 
 
