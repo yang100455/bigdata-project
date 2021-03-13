@@ -25,14 +25,14 @@ public class TestController {
     IApiRecordService service;
 
     @ResponseBody
-    @RequestMapping("/test")
+    @RequestMapping("/szt")
     public String test(@RequestParam(name = "pages", defaultValue = "1") Integer pages) {
         logger.info("pages: {}", pages);
 
         IntStream.range(0, pages).forEach(idx -> {
             //防止并发写重复读取数据，控制单线程读
             synchronized (this.getClass()) {
-                service.writeRemoteToSzLibrary();
+                service.writeRemoteToSZT();
             }
         });
 

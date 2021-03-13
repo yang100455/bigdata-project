@@ -49,10 +49,10 @@ public class MysqlGenerator {
     final static String[] tables ={
             //输入你的表
 //            "t_api_record"
-            "t_sz_library"
+            "t_sz_metro"
     };
     static String author="yangxianwei";
-    static String url = "jdbc:mysql://node001:3306/big_data?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8";
+    static String url = "jdbc:mysql://node101:3306/big_data?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8";
 
     /**
      * RUN THIS
@@ -96,7 +96,7 @@ public class MysqlGenerator {
         //mysql1.8驱动
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("123456");
+        dsc.setPassword("Hadoop123");
         mpg.setDataSource(dsc);
 
         // 包配置
@@ -158,7 +158,7 @@ public class MysqlGenerator {
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
-        strategy.setColumnNaming(NamingStrategy.underline_to_camel);
+//        strategy.setColumnNaming(NamingStrategy.underline_to_camel);
 //        strategy.setSuperEntityClass("com.baomidou.mybatisplus.samples.generator.common.BaseEntity");
         strategy.setEntityLombokModel(true);
 //        strategy.setSuperControllerClass("edu.jufe.fraternity.controller.AbstractController");

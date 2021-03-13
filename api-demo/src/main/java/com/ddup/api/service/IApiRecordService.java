@@ -15,4 +15,6 @@ public interface IApiRecordService extends IService<ApiRecord> {
 
     void writeRemoteToSzLibrary();
 
+    void writeRemoteToSZT();
+
 }

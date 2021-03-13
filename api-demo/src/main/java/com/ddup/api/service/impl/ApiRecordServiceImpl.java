@@ -8,8 +8,10 @@ import com.ddup.api.dao.mapper.ApiRecordMapper;
 import com.ddup.api.dao.mapper.SzLibraryMapper;
 import com.ddup.api.pojo.entity.ApiRecord;
 import com.ddup.api.pojo.entity.SzLibrary;
+import com.ddup.api.pojo.entity.SzMetro;
 import com.ddup.api.service.IApiRecordService;
 import com.ddup.api.service.ISzLibraryService;
+import com.ddup.api.service.ISzMetroService;
 import lombok.SneakyThrows;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -45,6 +47,8 @@ public class ApiRecordServiceImpl extends ServiceImpl<ApiRecordMapper, ApiRecord
     ISzLibraryService szLibraryService;
     @Autowired
     ApiRecordMapper apiRecordMapper;
+    @Autowired
+    ISzMetroService szMetroService;
 
     @SneakyThrows
     @Transactional(rollbackFor = RuntimeException.class)
@@ -93,6 +97,53 @@ public class ApiRecordServiceImpl extends ServiceImpl<ApiRecordMapper, ApiRecord
         record.setOffset(record.getOffset() + newList.size());
         apiRecordMapper.updateById(record);
 
+    }
+
+    @SneakyThrows
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void writeRemoteToSZT() {
+        ApiRecord record = apiRecordMapper.selectOne(new QueryWrapper<ApiRecord>()
+                .lambda()
+                .eq(ApiRecord::getApi, "szt")
+                .eq(ApiRecord::getEnable, "1"));
+
+        if (Objects.isNull(record)) {
+            log.info("没有可用配置.....");
+        }
+
+        Long offset = record.getOffset();
+        Integer pageSize = record.getPageSize();
+        int page = 1;
+        int[] start = new int[]{0};
+        if (offset > 0) {
+            page = (int) (offset / pageSize + 1);
+            start[0] = (int) (offset % pageSize);
+        }
+
+        OkHttpClient cli = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder()
+                .add("page", String.valueOf(page))
+                .add("rows", String.valueOf(record.getPageSize()))
+                .add("appKey", record.getAppKey())
+                .build();
+
+        Request request = new Request.Builder()
+                .url(record.getUrl())
+                .post(formBody)
+                .build();
+
+        Response response = cli.newCall(request).execute();
+        String resp = response.body().string();
+        JSONObject parse = JSONObject.parseObject(resp);
+
+        log.info("total:{},page:{},rows:{} ", parse.get("total"), parse.get("page"), parse.get("rows"));
+
+        List<SzMetro> szMetros = JSON.parseArray(parse.getString("data"), SzMetro.class);
+        List<SzMetro> newList = szMetros.subList(start[0], szMetros.size());
+        szMetroService.saveBatch(newList);
+        record.setOffset(record.getOffset() + newList.size());
+        apiRecordMapper.updateById(record);
     }
 
 
